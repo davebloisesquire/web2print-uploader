@@ -3,17 +3,39 @@ const fileUploadSubmit = document.getElementById("file-submit");
 let fileList = "<h1>File List:</h1><br>";
 
 fileUploadSubmit.addEventListener("click", () => {
-    
+    alert("Don't do nothin yet hoss")
 })
 
 fileUploadArea.addEventListener("change", () => {
     for (let i = 0; i < fileUploadArea.files.length; i++) {
         const file = fileUploadArea.files[i];
+        addPdfsToBucket(file)
         setupReader(file);
     }
 })
 
-function setupReader(file) {
+function addPdfsToBucket(file) {
+    var storage = firebase.storage().ref(file.name);
+    var upload = storage.put(file);
+
+    upload.on(
+        "state_changed",
+        function progress(snapshot) {
+            var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            document.getElementById("progress").value = percentage;
+        },
+        function error() {
+            alert("error uploading file");
+        },
+        function complete() {
+            document.getElementById(
+                "uploading"
+            ).innerHTML += `${file.name} uploaded <br />`;
+        }
+    )
+}
+
+function setupReader(file, pdfUrl) {
     console.log(file);
 
     const fileReader = new FileReader();
@@ -24,6 +46,7 @@ function setupReader(file) {
 }
 
 function checkFile(text, fileName) {
+    const pdfUrl = "./testBlob.pdf"
     let contourCheck;
     let cutContourCheck;
     let perfCutContourCheck;
@@ -45,7 +68,7 @@ function checkFile(text, fileName) {
     fileList = fileList + `<div class="card mb-3 border-${contourCheck}">
     <div class="row g-0">
       <div class="col-md-4">
-        <img src="pdf.png" data-pdf-thumbnail-file="testBlob.pdf" class="img-fluid rounded-start" alt="img">
+        <img src="pdf.png" data-pdf-thumbnail-file="${pdfUrl}" class="img-fluid rounded-start" alt="img">
       </div>
       <div class="col-md-8">
         <div class="card-body text-${contourCheck}">

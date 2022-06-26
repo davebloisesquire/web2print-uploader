@@ -19,7 +19,8 @@ At the moment my main goal is just to be able to move existing files around, che
 
 ## Tech Being used currently
 The frontend is mostly vanilla js (trying to keep it simple).
-But I'm using the pdfjs package from mozilla and a pdf to image generator from https://github.com/scandel/pdfThumbnails this repo. I'm using it as a temporary solution, but I actually really like how the package works and I might just keep it instead of trying to replace it. 
+But I'm using the pdfjs package from mozilla and a pdf to image generator from https://github.com/scandel/pdfThumbnails this repo. I'm using it as a temporary solution, but I actually really like how the package works and I might just keep it instead of trying to replace it.
+And BootStrap. Cuz I don't want to create a ui from scratch.
 
 ## Final thoughts
 This is not only a work in progess, but also a way of organizing my thoughts. So yes, there's going to be a lot of garbage in this repo until I figure out exactly how I want this thing to be.
