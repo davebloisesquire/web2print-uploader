@@ -10,7 +10,7 @@ fileUploadArea.addEventListener("change", () => {
     for (let i = 0; i < fileUploadArea.files.length; i++) {
         const file = fileUploadArea.files[i];
         addPdfsToBucket(file)
-        setupReader(file);
+            // setupReader(file);
     }
 })
 
@@ -28,25 +28,25 @@ function addPdfsToBucket(file) {
             alert("error uploading file");
         },
         function complete() {
-            document.getElementById(
-                "uploading"
-            ).innerHTML += `${file.name} uploaded <br />`;
+            //document.getElementById("uploading").innerHTML += `${file.name} uploaded <br />`;
+            storage.getDownloadURL().then((url) => {
+                setupReader(file, url);
+            })
         }
     )
 }
 
-function setupReader(file) {
+function setupReader(file, url) {
     console.log(file);
 
     const fileReader = new FileReader();
     fileReader.onload = () => {
-        checkFile(fileReader.result, file.name)
+        checkFile(fileReader.result, file.name, url)
     }
     fileReader.readAsBinaryString(file)
 }
 
-function checkFile(text, fileName) {
-    const pdfUrl = "./testBlob.pdf"
+function checkFile(text, fileName, pdfUrl) {
     let contourCheck;
     let cutContourCheck;
     let perfCutContourCheck;
@@ -65,10 +65,20 @@ function checkFile(text, fileName) {
     const height = Number(text.match(/(?<=\<stDim\:h\>).*?(?=\<\/stDim\:h\>)/gs));
     const skuNumber = fileName.match(/[0-9]{4,5}/);
 
+    console.log(pdfUrl);
+
     fileList = fileList + `<div class="card mb-3 border-${contourCheck}">
     <div class="row g-0">
       <div class="col-md-4">
-        <img src="pdf.png" data-pdf-thumbnail-file="${pdfUrl}" class="img-fluid rounded-start" alt="img">
+      <embed
+      class="item-pdf"
+      src="${pdfUrl}"
+      type="application/pdf"
+      scrolling="none"
+      height="200px"
+      width="auto"
+  ></embed>
+        <!-- <img src="pdf.png" data-pdf-thumbnail-file="${pdfUrl}" class="img-fluid rounded-start" alt="img"> -->
       </div>
       <div class="col-md-8">
         <div class="card-body text-${contourCheck}">
